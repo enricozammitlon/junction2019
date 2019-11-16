@@ -137,3 +137,17 @@ def SurveyResponses():
             users[i]['G'] = G
     resp = jsonify(success=True)
 return resp
+
+@app.route('/GetInterest', methods=['POST'])
+def GetInterest():
+   id = request.args.get('id')
+   Interest_ret = None
+   content = request.get_json(silent=False)
+   for i in range(100):
+      Interest = i/1000
+      final = content['Initial']
+      for j in range(content['YTT']):
+         final = final*(1+Interest) + content['Cont']
+      if final >= content['Target']:
+         Interest_ret = Interest
+   return None
