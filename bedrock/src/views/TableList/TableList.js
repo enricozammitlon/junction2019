@@ -106,7 +106,7 @@ class TableList extends Component {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({}),
-    }).then( res => {oldThis.updateTable()})
+    })
 
     let b= await response2.json()
     b=b['MatchFunds']

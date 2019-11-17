@@ -2,6 +2,8 @@ import React , {Component} from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
+
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -49,15 +51,46 @@ class UserProfile extends Component {
     this.state={milestones:[]}
 
     this.classes = cold(useStyles);
+
+    this.handleChange = this.handleChange.bind(this);
+
+  }
+
+  async componentWillMount(){
+    let response2 = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/getMilestones?id=1', {
+    method: 'GET'
+    })
+
+    let b= await response2.json()
+    console.log(b)
+  }
+
+
+  handleChange(event){
+    var name= event.target.id
+    this.setState({
+      [name] : event.target.value
+    })
   }
 
 
   findFunds = async (e) => {
+    let response = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/GetInterest?id=1', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({Initial:this.state.initialbal,YTT:this.state.year,Cont:this.state.yearlycont,Target:this.state.projectedbalance}),
+    })
+    let a= await response.json()
+    console.log(a)
+
     let response2 = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/GetFundsMatchReturns', {
     method: 'POST',
-    
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({perms:1,interest:a.interest}),
     })
+
     let b= await response2.json()
+    console.log(b)
     b=b['MatchFunds']
     var c=[]
     for (var i = 0; i <b.length; i++) {
@@ -67,6 +100,7 @@ class UserProfile extends Component {
     this.setState({
       matchedFunds:c
     })
+    
   }
 
   render(){
@@ -103,42 +137,66 @@ class UserProfile extends Component {
               <CardBody>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={3}>
-                    <CustomInput
-                      labelText="Name of Milestone"
+                  <InputLabel
+                    className={this.classes.labelRoot}
+                  >
+                    Name of Milestone
+                  </InputLabel>
+                    <Input
                       id="name"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
+                      value={this.state.name}
+                      onChange={this.handleChange}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Year of Planned Completion"
+                  <InputLabel
+                    className={this.classes.labelRoot}
+                  >
+                    Year of Planned Completion
+                  </InputLabel>
+                    <Input
                       id="year"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                    />
+                      value={this.state.year}
+                      onChange={this.handleChange}
+                    />                    
                   </GridItem>
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={6}>
-                    <CustomInput
-                      labelText="Milestone Balance"
-                      id="projected-balance"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                    />
+                   <InputLabel
+                    className={this.classes.labelRoot}
+                  >
+                    Milestone Balance
+                  </InputLabel>
+                    <Input
+                      id="projectedbalance"
+                      value={this.state.projectedbalance}
+                      onChange={this.handleChange}
+                    />  
                   </GridItem>
                   <GridItem xs={12} sm={12} md={6}>
-                    <CustomInput
-                      labelText="Yearly Contribution"
-                      id="yearly-cont"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                    />
+                  <InputLabel
+                    className={this.classes.labelRoot}
+                  >
+                   Yearly Contribution
+                  </InputLabel>
+                    <Input
+                      id="yearlycont"
+                      value={this.state.yearlycont}
+                      onChange={this.handleChange}
+                    />  
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                  <InputLabel
+                    className={this.classes.labelRoot}
+                  >
+                  Initial Balance
+                  </InputLabel>
+                    <Input
+                      id="initialbal"
+                      value={this.state.initialbal}
+                      onChange={this.handleChange}
+                    />  
                   </GridItem>
                 </GridContainer>
 
@@ -147,7 +205,7 @@ class UserProfile extends Component {
           </GridItem>
 
           <GridContainer xs={12} justify="center">
-            <Button color="primary">Find me funds</Button>
+            <Button onClick={this.findFunds} color="primary">Find me funds</Button>
           </GridContainer>             
 
         </GridContainer>
