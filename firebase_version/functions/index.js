@@ -52,10 +52,10 @@ exports.profile = functions.https.onRequest((req, res) => {
     }
     else if(req.method === 'GET'){
       console.log(req.query.id)
-      var id = req.query.id
-      var content = req.body
+      id = req.query.id
+      content = req.body
       for(i=0;i<users.length;i++){
-        if(id == users[i]['id']){
+        if(id === users[i]['id']){
           return res.status(200).json(users[i])
         }
       }
@@ -82,7 +82,7 @@ exports.GetFundsMatchOpinion = functions.https.onRequest((req, res) => {
       var G=0
       var Strictness=0
       for(i=0;i<users.length;i++){
-        if(id == users[i]['id']){
+        if(id === users[i]['id']){
           E = users[i]['E']
           S = users[i]['S']
           G = users[i]['G']
@@ -119,7 +119,7 @@ exports.SetFundsMatchOpinion = functions.https.onRequest((req, res) => {
       var content = req.body
 
       for(i=0;i<users.length;i++){
-        if(id == users[i]['id']){
+        if(id === users[i]['id']){
           users[i]['FundsMatchOpinion'] = content['FundsMatchOpinion']
         }
       }
@@ -166,12 +166,12 @@ exports.SurveyResponses = functions.https.onRequest((req, res) => {
       //Q9: Should their be greater fines on comapnies who find tax loopholes>
       var g3 = content['9']
 
-      E = (e1 + e2 + e3) / 3
-      S = (s1 + s2  + s3) /3
-      G = (g1 + g2  + g3) /3
+      E = (e1 + e2 + e3) / 3 *10
+      S = (s1 + s2  + s3) /3 *10
+      G = (g1 + g2  + g3) /3 *10
 
       for(i=0;i<users.length;i++){
-        if(id == users[i]['id']){
+        if(id === users[i]['id']){
           users[i]['E'] = E
           users[i]['S'] = S
           users[i]['G'] = G
