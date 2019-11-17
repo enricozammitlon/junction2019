@@ -76,24 +76,18 @@ exports.profile = functions.https.onRequest((req, res) => {
 
 exports.GetFundsMatchOpinion = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    if(req.method === 'GET'){
+    if(req.method === 'POST'){
       var id = req.query.id
       var MatchFunds = []
-      var E=0
-      var S=0
-      var G=0
-      var Strictness=0
-      for(i=0;i<users.length;i++){
-        if(id === users[i]['id']){
-          E = users[i]['E']
-          S = users[i]['S']
-          G = users[i]['G']
-          Strictness = users[i]['Strictness']
-        }
-      }
+      var E=req.body.E
+      var S=req.body.S
+      var G=req.body.G
+      var Strictness=req.body.Str
       var MinE = E - Strictness
       var MinS = S - Strictness
       var MinG = G - Strictness
+      
+      console.log(MinE)
       for(i=0;i<FundList.length;i++){
         if ((FundList[i]['E'] >= MinE) && (FundList[i]['S'] >= MinS) && (FundList[i]['G'] >= MinG)){
           MatchFunds.push(FundList[i])
