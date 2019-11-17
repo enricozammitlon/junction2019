@@ -224,7 +224,7 @@ class TableList extends Component {
         </GridContainer>
 
         <GridContainer xs={12} justify="center">
-          <GridItem xs={12} sm={12} md={6}>
+          <GridItem xs={12} sm={12} md={12}>
               <Card>
                 <CardHeader color="warning">
                   <h4 className={this.classes.cardTitleWhite}>Your Portfolio</h4>
