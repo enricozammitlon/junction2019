@@ -51,6 +51,24 @@ class UserProfile extends Component {
     this.classes = cold(useStyles);
   }
 
+
+  findFunds = async (e) => {
+    let response2 = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/GetFundsMatchReturns', {
+    method: 'POST',
+    
+    })
+    let b= await response2.json()
+    b=b['MatchFunds']
+    var c=[]
+    for (var i = 0; i <b.length; i++) {
+      c.push([b[i]['Name'],b[i]['MSRating'],b[i]['12mReturns'],b[i]['TotRet'],b[i]['Risk'],b[i]['E']+'/'+b[i]['S']+'/'+b[i]['G']])
+    }
+    console.log(c)
+    this.setState({
+      matchedFunds:c
+    })
+  }
+
   render(){
     return (
       <div>

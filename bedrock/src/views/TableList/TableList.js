@@ -98,14 +98,16 @@ class TableList extends Component {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(allStates),
-    }).then( res => {console.log("hi");oldThis.updateTable()})
+    }).then( res => {oldThis.updateTable()})
   }
 
   updateTable = async () => {
-    console.log("heyy")
     let response2 = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/GetFundsMatchOpinion?id=1', {
-    method: 'GET'
-    })
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({}),
+    }).then( res => {oldThis.updateTable()})
+
     let b= await response2.json()
     b=b['MatchFunds']
     var c=[]
