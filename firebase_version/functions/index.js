@@ -176,7 +176,7 @@ exports.SurveyResponses = functions.https.onRequest((req, res) => {
         }
       }
 
-      return res.status(200).json({'success' : true,"users":users})
+      return res.status(200).json({'success' : true,"E":E,"S":S,"G":G})
     }
     else{
       return res.status(401).json({
