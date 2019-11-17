@@ -33,7 +33,7 @@ const users = [
 const FundList = [
       {'Name':'BlackRock Balanced Managed Fund','Ticker': 'FTSE','MSRating':3,'12mReturns':0.007,'TotRet':0.08,'Risk':4,'E':2,'S':2,'G':2},
       {'Name':'BlackRock I love Trees Fund','Ticker': 'SPY','MSRating':3,'12mReturns':0.004,'TotRet':0.05,'Risk':4,'E':7,'S':7,'G':7},
-      {'Name':'BlackRock I love Trees Fund','Ticker': 'DJI','MSRating':2,'12mReturns':0.05,'TotRet':0.05,'Risk':4,'E':6,'S':6,'G':6}
+      {'Name':'BlackRock I love People Fund','Ticker': 'DJI','MSRating':2,'12mReturns':0.05,'TotRet':0.05,'Risk':4,'E':6,'S':6,'G':6}
       ]
 
 exports.profile = functions.https.onRequest((req, res) => {
@@ -97,6 +97,8 @@ exports.GetFundsMatchOpinion = functions.https.onRequest((req, res) => {
           MatchFunds.push(FundList[i])
         }
       }
+      users[id]['FundsMatchOpinion']=MatchFunds
+      console.log(users)
       return res.status(200).json({'MatchFunds' : MatchFunds})
     }
     else{
