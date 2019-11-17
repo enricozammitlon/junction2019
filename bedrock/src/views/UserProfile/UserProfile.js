@@ -48,23 +48,14 @@ class UserProfile extends Component {
 
     const useStyles = makeStyles(styles);
 
-    this.state={milestones:[]}
+    this.state={milestones:[["New Car","5","3000","500"]],
+      matchedFunds:[]}
 
     this.classes = cold(useStyles);
 
     this.handleChange = this.handleChange.bind(this);
 
   }
-
-  async componentWillMount(){
-    let response2 = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/getMilestones?id=1', {
-    method: 'GET'
-    })
-
-    let b= await response2.json()
-    console.log(b)
-  }
-
 
   handleChange(event){
     var name= event.target.id
@@ -91,6 +82,7 @@ class UserProfile extends Component {
 
     let b= await response2.json()
     console.log(b)
+
     b=b['MatchFunds']
     var c=[]
     for (var i = 0; i <b.length; i++) {
@@ -120,7 +112,7 @@ class UserProfile extends Component {
                   <Table
                     tableHeaderColor="warning"
                     tableHead={["Name", "Year of Planned Completion", "Milestone Balance","Yearly Contribution"]}
-                    tableData={[]}
+                    tableData={this.state.milestones}
                   />
                 </CardBody>
               </Card>
@@ -207,6 +199,28 @@ class UserProfile extends Component {
           <GridContainer xs={12} justify="center">
             <Button onClick={this.findFunds} color="primary">Find me funds</Button>
           </GridContainer>             
+
+        <GridContainer xs={12} justify="center">
+          <GridItem xs={12} sm={12} md={12}>
+              <Card>
+                <CardHeader color="success">
+                  <h4 className={this.classes.cardTitleWhite}>Suitable Funds</h4>
+                  <p className={this.classes.cardCategoryWhite}>
+                    These are the suitable funds found given your investing portfolio and your needed interest rate.
+                  </p>
+                </CardHeader>
+                <CardBody>
+                  <Table
+                    tableHeaderColor="success"
+                    tableHead={["Name", "MS Rating", "12 Month Return","Total Annual Return","Volatility","E/S/G"]}
+                    tableData={this.state.matchedFunds}
+                  />
+                </CardBody>
+              </Card>
+            </GridItem>
+          </GridContainer>
+
+
 
         </GridContainer>
 

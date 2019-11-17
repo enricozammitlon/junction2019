@@ -97,15 +97,15 @@ class TableList extends Component {
     const response = await fetch(' https://us-central1-bedrock-2019.cloudfunctions.net/SurveyResponses?id=1', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(allStates),
-    }).then( res => {oldThis.updateTable()})
+    body: JSON.stringify({allStates}),
+    }).then( res => {oldThis.updateTable(res)})
   }
 
-  updateTable = async () => {
+  updateTable = async (input) => {
     let response2 = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/GetFundsMatchOpinion?id=1', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({}),
+    body: JSON.stringify({"E":input[1]["E"],"C":input[1]["C"],"G":input[1]["G"],"S":2}),
     })
 
     let b= await response2.json()
