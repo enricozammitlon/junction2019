@@ -19,7 +19,8 @@ class TableList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      buttonsState: [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
+      buttonsState: [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
+      matchedFunds: []
     };
     const styles = {
       cardCategoryWhite: {
@@ -91,15 +92,31 @@ class TableList extends Component {
       }
       
     }
+
+    var oldThis = this
     const response = await fetch(' https://us-central1-bedrock-2019.cloudfunctions.net/SurveyResponses?id=1', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(allStates),
-  })
-  console.log(await response.json())
+    }).then( res => {console.log("hi");oldThis.updateTable()})
   }
 
-
+  updateTable = async () => {
+    console.log("heyy")
+    let response2 = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/GetFundsMatchOpinion?id=1', {
+    method: 'GET'
+    })
+    let b= await response2.json()
+    b=b['MatchFunds']
+    var c=[]
+    for (var i = 0; i <b.length; i++) {
+      c.push([b[i]['Name'],b[i]['MSRating'],b[i]['12mReturns'],b[i]['TotRet'],b[i]['Risk'],b[i]['E']+'/'+b[i]['S']+'/'+b[i]['G']])
+    }
+    console.log(c)
+    this.setState({
+      matchedFunds:c
+    })
+  }
 
   render(){
 
@@ -202,9 +219,29 @@ class TableList extends Component {
           </Card>
         </GridItem>
 
-    <GridContainer xs={12} justify="center">
-      <Button onClick={this.submitChanges} color="info">Update Profile</Button>
-    </GridContainer>
+        <GridContainer xs={12} justify="center">
+          <Button onClick={this.submitChanges} color="info">Update Profile</Button>
+        </GridContainer>
+
+        <GridContainer xs={12} justify="center">
+          <GridItem xs={12} sm={12} md={6}>
+              <Card>
+                <CardHeader color="warning">
+                  <h4 className={this.classes.cardTitleWhite}>Your Portfolio</h4>
+                  <p className={this.classes.cardCategoryWhite}>
+                    Information about funds that match your investment profile
+                  </p>
+                </CardHeader>
+                <CardBody>
+                  <Table
+                    tableHeaderColor="warning"
+                    tableHead={["Name", "MSRating", "12 Month Return","Total Annual Return","Volatility","E/S/G"]}
+                    tableData={this.state.matchedFunds}
+                  />
+                </CardBody>
+              </Card>
+            </GridItem>
+          </GridContainer>
 
       </GridContainer>
     );

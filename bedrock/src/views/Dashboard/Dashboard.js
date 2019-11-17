@@ -53,14 +53,10 @@ class Dashboard extends Component {
     method: 'GET'
     })
     let a= await response.json()
-    let response2 = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/GetFundsMatchOpinion?id=1', {
-    method: 'GET'
-    })
-    let b= await response2.json()
-    console.log(b)
+    
     this.setState({
       balance:a['Balance'],
-      funds:b
+      funds:[]
     })
     
   }
@@ -222,7 +218,8 @@ class Dashboard extends Component {
                 <Table
                   tableHeaderColor="warning"
                   tableHead={["Name", "Amount Invested", "12 Month Return","Total Annual Return","Volatility","E/S/G"]}
-                  tableData={[
+                  tableData={
+                    [
                     ["ABC", "$36,738", "1%","3%","Low","E"],
                     ["DEF", "$40,738", "6%","2%","Low","ES"],
                     ["GHI", "$3,538", "4%","3%","Medium","ESG"],
