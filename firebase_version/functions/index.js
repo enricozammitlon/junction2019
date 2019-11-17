@@ -13,7 +13,7 @@ const users = [
      'E': '4',
      'S':'4',
      'G':'4',
-     'Strictness':'0',
+     'Strictness':'3',
      'FundsMatchOpinion': []
      },
     {'id': '1',
@@ -31,9 +31,9 @@ const users = [
 ]
 
 const FundList = [
-      {'Name':'BlackRock Balanced Managed Fund','Ticker': 'FTSE','MSRating':3,'12mReturns':0.007,'TotRet':0.08,'Risk':4,'E':4,'S':4,'G':4},
-      {'Name':'BlackRock I love Trees Fund','Ticker': 'SPY','MSRating':3,'12mReturns':0.004,'TotRet':0.05,'Risk':4,'E':7,'S':3,'G':4},
-      {'Name':'BlackRock I love Trees Fund','Ticker': 'DJI','MSRating':2,'12mReturns':0.05,'TotRet':0.05,'Risk':4,'E':2,'S':6,'G':4}
+      {'Name':'BlackRock Balanced Managed Fund','Ticker': 'FTSE','MSRating':3,'12mReturns':0.007,'TotRet':0.08,'Risk':4,'E':2,'S':2,'G':2},
+      {'Name':'BlackRock I love Trees Fund','Ticker': 'SPY','MSRating':3,'12mReturns':0.004,'TotRet':0.05,'Risk':4,'E':7,'S':7,'G':7},
+      {'Name':'BlackRock I love Trees Fund','Ticker': 'DJI','MSRating':2,'12mReturns':0.05,'TotRet':0.05,'Risk':4,'E':6,'S':6,'G':6}
       ]
 
 exports.profile = functions.https.onRequest((req, res) => {
