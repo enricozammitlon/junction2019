@@ -31,9 +31,9 @@ const users = [
 ]
 
 const FundList = [
-      {'Name':'BlackRock Balanced Managed Fund','Ticker': 'FTSE','MSRating':3,'12mReturns':0.007,'TotRet':0.08,'Risk':4,'E':2,'S':2,'G':2},
-      {'Name':'BlackRock I love Trees Fund','Ticker': 'SPY','MSRating':3,'12mReturns':0.004,'TotRet':0.05,'Risk':4,'E':7,'S':7,'G':7},
-      {'Name':'BlackRock I love People Fund','Ticker': 'DJI','MSRating':2,'12mReturns':0.05,'TotRet':0.05,'Risk':4,'E':6,'S':6,'G':6}
+      {'Name':'BlackRock Balanced Managed Fund','Ticker': 'FTSE','MSRating':3,'12mReturns':7,'TotRet':8,'Risk':4,'E':2,'S':2,'G':2},
+      {'Name':'BlackRock I love Trees Fund','Ticker': 'SPY','MSRating':3,'12mReturns':4,'TotRet':5,'Risk':4,'E':7,'S':7,'G':7},
+      {'Name':'BlackRock I love People Fund','Ticker': 'DJI','MSRating':2,'12mReturns':5,'TotRet':5,'Risk':4,'E':6,'S':6,'G':6}
       ]
 
 exports.profile = functions.https.onRequest((req, res) => {
@@ -215,8 +215,65 @@ exports.GetInterest = functions.https.onRequest((req, res) => {
         }
 
       }
-
       return res.status(200).json({'interest' : "Not possible."})
+    }
+    else{
+      return res.status(401).json({
+          message: 'Not allowed'
+        })
+    }
+    }, (error) => {
+      return res.status(error.code).json({
+        message: `Something went wrong. ${error.message}`
+      })
+    })
+  })
+
+exports.GetFundsMatchReturns = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    if(req.method === 'POST'){
+      var MatchFunds = []
+      var content = req.body
+      var MaxPerms= content.perms
+      var Interest=content.interest
+
+      var id = req.query.id
+
+      if (MaxPerms === 1){
+        for (i=0;i<FundList.length;i++){
+           if(FundList[i]['12mReturns'] >= Interest){
+              MatchFunds.push(FundList[i])
+           }
+        }
+      }
+
+      if (MaxPerms === 2){
+        for(i=0;i<FundList.length;i++){
+           for(j=0;j<FundList.length;j++){
+              if(i !== j){
+                 if ( (FundList[i]['12mReturns']+FundList[j]['12mReturns'] ) /2 > Interest){
+                    MatchFunds.push([FundList[i],FundList[j]])
+                 }
+              }
+            }
+          }
+      }
+
+      if (MaxPerms === 3){
+        for(i=0;i<FundList.length;i++){
+          for(j=0;j<FundList.length;j++){
+            for(k=0;k<FundList.length;k++){
+              if ((i !== j) && (j !== k) && (k !== i)){
+                 if ((FundList[i]['12mReturns']+FundList[j]['12mReturns']+FundList[k]['12mReturns'])/3 > Interest){
+                    MatchFunds.push([FundList[i],FundList[j],FundList[k]])
+                 }
+              }
+            }
+          }
+        }
+      }
+        
+      return res.status(200).json({'MatchFunds' : MatchFunds})
     }
     else{
       return res.status(401).json({
