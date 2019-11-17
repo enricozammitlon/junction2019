@@ -14,7 +14,8 @@ const users = [
      'S':'4',
      'G':'4',
      'Strictness':'3',
-     'FundsMatchOpinion': []
+     'FundsMatchOpinion': [],
+     'Milestones':[]
      },
     {'id': '1',
      'Name': 'Bernie Sanders ',
@@ -25,7 +26,8 @@ const users = [
      'S':'6',
      'G':'7',
      'Strictness':'2',
-     'FundsMatchOpinion': []
+     'FundsMatchOpinion': [],
+     'Milestones':[]
      },
 
 ]
@@ -274,6 +276,49 @@ exports.GetFundsMatchReturns = functions.https.onRequest((req, res) => {
       }
         
       return res.status(200).json({'MatchFunds' : MatchFunds})
+    }
+    else{
+      return res.status(401).json({
+          message: 'Not allowed'
+        })
+    }
+    }, (error) => {
+      return res.status(error.code).json({
+        message: `Something went wrong. ${error.message}`
+      })
+    })
+  })
+
+exports.AddMilestone = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    if(req.method === 'POST'){
+      var id = req.query.id
+      var content = req.body
+
+      users[id]['Milestones'].push({'name':content.name,'ytt':content.ytt,'cont':content.cont,'target':content.target,'funds':content.funds})
+
+      return res.status(200).json({'result' : users[id]['Milestones']})
+    }
+    else{
+      return res.status(401).json({
+          message: 'Not allowed'
+        })
+    }
+    }, (error) => {
+      return res.status(error.code).json({
+        message: `Something went wrong. ${error.message}`
+      })
+    })
+  })
+
+exports.getMilestones = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    if(req.method === 'GET'){
+      var id = req.query.id
+
+      milestones=users[id]['Milestones']
+
+      return res.status(200).json({'milestones' : users})
     }
     else{
       return res.status(401).json({
