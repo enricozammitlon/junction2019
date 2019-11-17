@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 // @material-ui/core
@@ -29,6 +29,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import { cold } from 'react-hot-loader';  
 
 import {
   totalEarningsChart,
@@ -38,177 +39,206 @@ import {
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
-const useStyles = makeStyles(styles);
 
-export default function Dashboard() {
-  const classes = useStyles();
-  return (
-    <div>
-      <GridContainer justify="center"  alignItems="center">
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    const useStyles = makeStyles(styles);
+    this.state={balance:0,funds:[]}
+    this.classes = cold(useStyles);
+  }
 
-        <GridItem xs={1} md={3}>
-          <Card>
-            <CardHeader color="success" stats icon>
-              <CardIcon color="success">
-                <Store />
-              </CardIcon>
-              <p className={classes.cardCategory}>Current Balance</p>
-              <h3 className={classes.cardTitle}>$34,245</h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Update />
-                Just Updated
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
+  async componentWillMount(){
+    let response = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/profile?id=1', {
+    method: 'GET'
+    })
+    let a= await response.json()
+    let response2 = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/GetFundsMatchOpinion?id=1', {
+    method: 'GET'
+    })
+    let b= await response2.json()
+    console.log(b)
+    this.setState({
+      balance:a['Balance'],
+      funds:b
+    })
+    
+  }
 
-        <GridItem xs={3} sm={6} md={3}>
-          <Card>
-            <CardHeader color="warning" stats icon>
-              <CardIcon color="warning">
-                <Icon>content_copy</Icon>
-              </CardIcon>
-              <p className={classes.cardCategorySmaller}>Number of Funds</p>
-              <h3 className={classes.cardTitle}>
-                12
-              </h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                {/*<BallotIcon />*/}
-                <Update />
-                Funds in Portfolio
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
+  render(){
+    return (
+      <div>
+        <GridContainer justify="center"  alignItems="center">
 
-        <GridItem xs={1} sm={6} md={3}>
-          <Card>
-            <CardHeader color="info" stats icon>
-              <CardIcon color="info">
-                <Accessibility />
-              </CardIcon>
-              <p className={classes.cardCategory}>Next Milestone</p>
-              <h3 className={classes.cardTitle}>$50,000</h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Update />
-                Due in 6 months
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
+          <GridItem xs={1} md={3}>
+            <Card>
+              <CardHeader color="success" stats icon>
+                <CardIcon color="success">
+                  <Store />
+                </CardIcon>
+                <p className={this.classes.cardCategory}>Current Balance</p>
+                <h3 className={this.classes.cardTitle}>${this.state.balance}</h3>
+              </CardHeader>
+              <CardFooter stats>
+                <div className={this.classes.stats}>
+                  <Update />
+                  Just Updated
+                </div>
+              </CardFooter>
+            </Card>
+          </GridItem>
 
-      </GridContainer>
+          <GridItem xs={3} sm={6} md={3}>
+            <Card>
+              <CardHeader color="warning" stats icon>
+                <CardIcon color="warning">
+                  <Icon>content_copy</Icon>
+                </CardIcon>
+                <p className={this.classes.cardCategorySmaller}>Number of Funds</p>
+                <h3 className={this.classes.cardTitle}>
+                  12
+                </h3>
+              </CardHeader>
+              <CardFooter stats>
+                <div className={this.classes.stats}>
+                  {/*<BallotIcon />*/}
+                  <Update />
+                  Funds in Portfolio
+                </div>
+              </CardFooter>
+            </Card>
+          </GridItem>
+
+          <GridItem xs={1} sm={6} md={3}>
+            <Card>
+              <CardHeader color="info" stats icon>
+                <CardIcon color="info">
+                  <Accessibility />
+                </CardIcon>
+                <p className={this.classes.cardCategory}>Next Milestone</p>
+                <h3 className={this.classes.cardTitle}>$50,000</h3>
+              </CardHeader>
+              <CardFooter stats>
+                <div className={this.classes.stats}>
+                  <Update />
+                  Due in 6 months
+                </div>
+              </CardFooter>
+            </Card>
+          </GridItem>
+
+        </GridContainer>
 
 
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={6}>
-          <Card chart>
-            <CardHeader color="success">
-              <ChartistGraph
-                className="ct-chart"
-                data={totalEarningsChart.data}
-                type="Line"
-                options={totalEarningsChart.options}
-                listener={totalEarningsChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Your Total earnings</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{" "}
-                increase from initial investment.
-              </p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> Updated 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={6}>
+            <Card chart>
+              <CardHeader color="success">
+                <ChartistGraph
+                  className="ct-chart"
+                  data={totalEarningsChart.data}
+                  type="Line"
+                  options={totalEarningsChart.options}
+                  listener={totalEarningsChart.animation}
+                />
+              </CardHeader>
+              <CardBody>
+                <h4 className={this.classes.cardTitle}>Your Total earnings</h4>
+                <p className={this.classes.cardCategory}>
+                  <span className={this.classes.successText}>
+                    <ArrowUpward className={this.classes.upArrowCardCategory} /> 55%
+                  </span>{" "}
+                  increase from initial investment.
+                </p>
+              </CardBody>
+              <CardFooter chart>
+                <div className={this.classes.stats}>
+                  <AccessTime /> Updated 2 days ago
+                </div>
+              </CardFooter>
+            </Card>
+          </GridItem>
 
-        <GridItem xs={12} sm={12} md={6}>
-          <Card chart>
-            <CardHeader color="info">
-              <ChartistGraph
-                className="ct-chart"
-                data={completedTasksChart.data}
-                type="Line"
-                options={completedTasksChart.options}
-                listener={completedTasksChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Completed Tasks</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
+          <GridItem xs={12} sm={12} md={6}>
+            <Card chart>
+              <CardHeader color="info">
+                <ChartistGraph
+                  className="ct-chart"
+                  data={completedTasksChart.data}
+                  type="Line"
+                  options={completedTasksChart.options}
+                  listener={completedTasksChart.animation}
+                />
+              </CardHeader>
+              <CardBody>
+                <h4 className={this.classes.cardTitle}>Completed Tasks</h4>
+                <p className={this.classes.cardCategory}>Last Campaign Performance</p>
+              </CardBody>
+              <CardFooter chart>
+                <div className={this.classes.stats}>
+                  <AccessTime /> campaign sent 2 days ago
+                </div>
+              </CardFooter>
+            </Card>
+          </GridItem>
 
-      </GridContainer>
+        </GridContainer>
 
-      <GridContainer>
+        <GridContainer>
 
-      <GridItem xs={4} md={6}>
-          <Card chart>
-            <CardHeader color="warning">
-              <ChartistGraph
-                className="ct-chart"
-                data={fundsPerformanceChart.data}
-                type="Bar"
-                options={fundsPerformanceChart.options}
-                responsiveOptions={fundsPerformanceChart.responsiveOptions}
-                listener={fundsPerformanceChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Funds Performance</h4>
-              <p className={classes.cardCategory}>Current vs Expected Yearly Returns</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> Updated 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
+        <GridItem xs={4} md={6}>
+            <Card chart>
+              <CardHeader color="warning">
+                <ChartistGraph
+                  className="ct-chart"
+                  data={fundsPerformanceChart.data}
+                  type="Bar"
+                  options={fundsPerformanceChart.options}
+                  responsiveOptions={fundsPerformanceChart.responsiveOptions}
+                  listener={fundsPerformanceChart.animation}
+                />
+              </CardHeader>
+              <CardBody>
+                <h4 className={this.classes.cardTitle}>Funds Performance</h4>
+                <p className={this.classes.cardCategory}>Current vs Expected Yearly Returns</p>
+              </CardBody>
+              <CardFooter chart>
+                <div className={this.classes.stats}>
+                  <AccessTime /> Updated 2 days ago
+                </div>
+              </CardFooter>
+            </Card>
+          </GridItem>
 
-        <GridItem xs={12} sm={12} md={6}>
-          <Card>
-            <CardHeader color="warning">
-              <h4 className={classes.cardTitleWhite}>Your Portfolio</h4>
-              <p className={classes.cardCategoryWhite}>
-                Information about funds in you personalised portfolio
-              </p>
-            </CardHeader>
-            <CardBody>
-              <Table
-                tableHeaderColor="warning"
-                tableHead={["Name", "Amount Invested", "12 Month Return","Total Annual Return","Volatility","E/S/G"]}
-                tableData={[
-                  ["ABC", "$36,738", "1%","3%","Low","E"],
-                  ["DEF", "$40,738", "6%","2%","Low","ES"],
-                  ["GHI", "$3,538", "4%","3%","Medium","ESG"],
-                  ["JKL", "$6,332", "1%","1%","Low","EG"]
-                ]}
-              />
-            </CardBody>
-          </Card>
-        </GridItem>
-      </GridContainer>
-    </div>
-  );
+          <GridItem xs={12} sm={12} md={6}>
+            <Card>
+              <CardHeader color="warning">
+                <h4 className={this.classes.cardTitleWhite}>Your Portfolio</h4>
+                <p className={this.classes.cardCategoryWhite}>
+                  Information about funds in you personalised portfolio
+                </p>
+              </CardHeader>
+              <CardBody>
+                <Table
+                  tableHeaderColor="warning"
+                  tableHead={["Name", "Amount Invested", "12 Month Return","Total Annual Return","Volatility","E/S/G"]}
+                  tableData={[
+                    ["ABC", "$36,738", "1%","3%","Low","E"],
+                    ["DEF", "$40,738", "6%","2%","Low","ES"],
+                    ["GHI", "$3,538", "4%","3%","Medium","ESG"],
+                    ["JKL", "$6,332", "1%","1%","Low","EG"]
+                  ]}
+                />
+              </CardBody>
+            </Card>
+          </GridItem>
+        </GridContainer>
+      </div>
+    );
+  }
 }
+
+
+
+export default Dashboard
+  

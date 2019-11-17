@@ -82,8 +82,8 @@ class TableList extends Component {
 
   submitChanges = async (e) => {
     var allStates={}
-    for (var i = 0; i < this.state.buttonsState.length; i++) {
-      if(this.state.buttonsState[0]==1){
+    for (var i = 1; i < this.state.buttonsState.length+1; i++) {
+      if(this.state.buttonsState[i-1][0]===1){
         allStates[""+i]=0
       }
       else{
@@ -91,7 +91,7 @@ class TableList extends Component {
       }
       
     }
-    const response = await fetch('http://localhost:5000/bedrock-2019/us-central1/SurveyResponses?id=0', {
+    const response = await fetch(' https://us-central1-bedrock-2019.cloudfunctions.net/SurveyResponses?id=1', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(allStates),
