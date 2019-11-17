@@ -318,7 +318,7 @@ exports.getMilestones = functions.https.onRequest((req, res) => {
 
       milestones=users[id]['Milestones']
 
-      return res.status(200).json({'milestones' : users})
+      return res.status(200).json({'milestones' : milestones})
     }
     else{
       return res.status(401).json({
