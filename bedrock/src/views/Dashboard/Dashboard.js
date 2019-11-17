@@ -37,16 +37,113 @@ import {
   completedTasksChart
 } from "variables/charts.js";
 
+import {
+  successColor,
+  whiteColor,
+  grayColor,
+  hexToRgb
+} from "assets/jss/material-dashboard-react.js";
+
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
+    const style={
+      successText: {
+        color: successColor[0]
+      },
+      upArrowCardCategory: {
+        width: "16px",
+        height: "16px"
+      },
+      stats: {
+        color: grayColor[0],
+        display: "inline-flex",
+        fontSize: "12px",
+        lineHeight: "22px",
+        "& svg": {
+          top: "4px",
+          width: "16px",
+          height: "16px",
+          position: "relative",
+          marginRight: "3px",
+          marginLeft: "3px"
+        },
+        "& .fab,& .fas,& .far,& .fal,& .material-icons": {
+          top: "4px",
+          fontSize: "16px",
+          position: "relative",
+          marginRight: "3px",
+          marginLeft: "3px"
+        }
+      },
+      cardCategory: {
+        color: grayColor[0],
+        margin: "0",
+        fontSize: "14px",
+        marginTop: "0",
+        paddingTop: "10px",
+        marginBottom: "0"
+      },
+      cardCategorySmaller: {
+        color: grayColor[0],
+        margin: "0",
+        fontSize: "12px",
+        marginTop: "0",
+        paddingTop: "10px",
+        marginBottom: "0"
+      },
+      cardCategoryWhite: {
+        color: "rgba(" + hexToRgb(whiteColor) + ",.62)",
+        margin: "0",
+        fontSize: "14px",
+        marginTop: "0",
+        marginBottom: "0"
+      },
+      cardTitle: {
+        color: grayColor[2],
+        marginTop: "0px",
+        minHeight: "auto",
+        fontWeight: "300",
+        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+        marginBottom: "3px",
+        textDecoration: "none",
+        "& small": {
+          color: grayColor[1],
+          fontWeight: "400",
+          lineHeight: "1"
+        }
+      },
+      cardTitleWhite: {
+        color: whiteColor,
+        marginTop: "0px",
+        minHeight: "auto",
+        fontWeight: "300",
+        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+        marginBottom: "3px",
+        textDecoration: "none",
+        "& small": {
+          color: grayColor[1],
+          fontWeight: "400",
+          lineHeight: "1"
+        }
+  }
+};
     const useStyles = makeStyles(styles);
     this.state={balance:0,funds:[]}
     this.classes = cold(useStyles);
+
+    this.classes.cardCategory={  
+    color: "black",
+    margin: "0",
+    fontSize: "14px",
+    marginTop: "0",
+    paddingTop: "10px",
+    marginBottom: "0"
   }
+}
 
   async componentWillMount(){
     let response = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/profile?id=1', {
@@ -66,14 +163,14 @@ class Dashboard extends Component {
       <div>
         <GridContainer justify="center"  alignItems="center">
 
-          <GridItem xs={1} md={3}>
+          <GridItem xs={12} sm={6} md={4}>
             <Card>
               <CardHeader color="success" stats icon>
                 <CardIcon color="success">
                   <Store />
                 </CardIcon>
-                <p className={this.classes.cardCategory}>Current Balance</p>
-                <h3 className={this.classes.cardTitle}>${this.state.balance}</h3>
+                <p style={{color:"black"}}className={this.classes.cardCategory}>Current Balance</p>
+                <h3 style={{color:"black"}} className={this.classes.cardTitle}>${this.state.balance}</h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={this.classes.stats}>
@@ -84,14 +181,14 @@ class Dashboard extends Component {
             </Card>
           </GridItem>
 
-          <GridItem xs={3} sm={6} md={3}>
+          <GridItem xs={12} sm={6} md={4}>
             <Card>
               <CardHeader color="warning" stats icon>
                 <CardIcon color="warning">
                   <Icon>content_copy</Icon>
                 </CardIcon>
-                <p className={this.classes.cardCategorySmaller}>Number of Funds</p>
-                <h3 className={this.classes.cardTitle}>
+                <p style={{color:"black"}} className={this.classes.cardCategorySmaller}>Number of Funds</p>
+                <h3 style={{color:"black"}} className={this.classes.cardTitle}>
                   12
                 </h3>
               </CardHeader>
@@ -105,14 +202,14 @@ class Dashboard extends Component {
             </Card>
           </GridItem>
 
-          <GridItem xs={1} sm={6} md={3}>
+          <GridItem xs={12} sm={6} md={4}>
             <Card>
               <CardHeader color="info" stats icon>
                 <CardIcon color="info">
                   <Accessibility />
                 </CardIcon>
-                <p className={this.classes.cardCategory}>Next Milestone</p>
-                <h3 className={this.classes.cardTitle}>$50,000</h3>
+                <p style={{color:"black"}} className={this.classes.cardCategory}>Next Milestone</p>
+                <h3 style={{color:"black"}} className={this.classes.cardTitle}>$50,000</h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={this.classes.stats}>
@@ -155,34 +252,7 @@ class Dashboard extends Component {
             </Card>
           </GridItem>
 
-          <GridItem xs={12} sm={12} md={6}>
-            <Card chart>
-              <CardHeader color="info">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={completedTasksChart.data}
-                  type="Line"
-                  options={completedTasksChart.options}
-                  listener={completedTasksChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={this.classes.cardTitle}>Completed Tasks</h4>
-                <p className={this.classes.cardCategory}>Last Campaign Performance</p>
-              </CardBody>
-              <CardFooter chart>
-                <div className={this.classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-
-        </GridContainer>
-
-        <GridContainer>
-
-        <GridItem xs={4} md={6}>
+        <GridItem xs={12} sm={12} md={6}>
             <Card chart>
               <CardHeader color="warning">
                 <ChartistGraph
@@ -206,7 +276,10 @@ class Dashboard extends Component {
             </Card>
           </GridItem>
 
-          <GridItem xs={12} sm={12} md={6}>
+        </GridContainer>
+
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardHeader color="warning">
                 <h4 className={this.classes.cardTitleWhite}>Your Portfolio</h4>

@@ -197,7 +197,7 @@ class UserProfile extends Component {
           </GridItem>
 
           <GridContainer xs={12} justify="center">
-            <Button onClick={this.findFunds} color="primary">Find me funds</Button>
+            <Button onClick={this.findFunds} color="primary">Find funds</Button>
           </GridContainer>             
 
         <GridContainer xs={12} justify="center">

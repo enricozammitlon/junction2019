@@ -28,6 +28,7 @@ import Language from "@material-ui/icons/Language";
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import TableList from "views/TableList/TableList.js";
+import Wiki from "views/wiki/Wiki.js";
 
 
 const dashboardRoutes = [
@@ -49,10 +50,18 @@ const dashboardRoutes = [
   },
   {
     path: "/user",
-    name: "Your Account",
+    name: "Milestones",
     rtlName: "ملف تعريفي للمستخدم",
     icon: Person,
     component: UserProfile,
+    layout: "/admin"
+  },
+  {
+    path: "/wiki",
+    name: "Learn",
+    rtlName: "ملف تعريفي للمستخدم",
+    icon: "assessment",
+    component: Wiki,
     layout: "/admin"
   }
 ];
