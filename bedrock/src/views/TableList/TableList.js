@@ -83,12 +83,13 @@ class TableList extends Component {
 
   submitChanges = async (e) => {
     var allStates={}
-    for (var i = 1; i < this.state.buttonsState.length+1; i++) {
-      if(this.state.buttonsState[i-1][0]===1){
-        allStates[""+i]=0
+    for (var i = 0; i < this.state.buttonsState.length; i++) {
+      var count=i+1
+      if(this.state.buttonsState[i][0]===1){
+        allStates[""+count]=0
       }
       else{
-        allStates[""+i]=1
+        allStates[""+count]=1
       }
       
     }
@@ -96,13 +97,13 @@ class TableList extends Component {
     const response = await fetch(' https://us-central1-bedrock-2019.cloudfunctions.net/SurveyResponses?id=1', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({allStates}),
+    body: JSON.stringify(allStates),
     })
     //.then( res => {oldThis.updateTable(res)})
 
     let b= await response.json()
-    console.log(b)
-    this.updateTable(b["users"])
+    var input=[b["E"],b["S"],b["G"]]
+    this.updateTable(input)
 
 
   }
@@ -112,7 +113,7 @@ class TableList extends Component {
     let response2 = await fetch('https://us-central1-bedrock-2019.cloudfunctions.net/GetFundsMatchOpinion?id=1', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({"E":input[1]["E"],"S":input[1]["S"],"G":input[1]["G"],"Str":2}),
+    body: JSON.stringify({"E":input[0],"S":input[1],"G":input[2],"Str":2}),
     })
 
     let b= await response2.json()
